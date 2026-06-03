@@ -61,6 +61,9 @@ generated sample meter frame, so the whole flow is still demonstrable.
   something to do — that's the exception-based concept in action.
 - **Reset demo data** in Settings restores the pilot seed (1 client, 2 sites,
   5 meters, baseline readings, 1 template + mappings).
+- **Example meter photos** live in `examples/` (one per pilot meter, matching its
+  register format). Use "Upload meter photo" in the capture flow to try them, or
+  regenerate with `python3 scripts/generate_meter_photos.py` (needs Pillow).
 
 ## Architecture & where production code plugs in
 
