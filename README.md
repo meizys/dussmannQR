@@ -85,15 +85,22 @@ Production scaffolding (stubs that match the PRD contracts) lives in:
   client's real master template **without regenerating it** (PRD §7.4 hard
   requirement). The browser SheetJS path is the demo equivalent.
 
-### Swapping the mock vision for a real API
+### Swapping the mock vision for the real Claude proxy
+
+A working, host-agnostic vision proxy (Anthropic Claude) ships in `server/`. It
+holds the API key server-side and speaks the exact JSON contract the PWA expects.
 
 ```bash
-cp .env.example .env
-# set VITE_VISION_API_URL=https://<your-edge-function>/extract
+export ANTHROPIC_API_KEY=sk-ant-...
+npm run vision-server                              # → http://localhost:8787/extract
+echo 'VITE_VISION_API_URL=http://localhost:8787/extract' >> .env
+npm run dev
 ```
 
-The contract (request and the strict JSON response) is documented in
-`src/lib/vision.ts` and implemented in the Edge Function stub.
+Now captures call Claude instead of the mock (confirm in **Settings → Vision
+mode**). The core `extractMeterReading()` is framework-free, so the same logic
+drops onto Vercel / Cloudflare / a Supabase Edge Function later — see
+`server/README.md`. The contract is documented in `src/lib/vision.ts`.
 
 ## Conscious scope cuts (it's an MVP)
 
@@ -102,8 +109,9 @@ The contract (request and the strict JSON response) is documented in
 - **Excel formatting preservation** is done properly only in the Python service.
   The in-browser SheetJS export proves the mapping→cell logic but generates a
   fresh sheet rather than injecting into the client's branded master.
-- **Vision is mocked** by default. Phase 0 of the PRD (prove accuracy on real
-  photos) is the real next step; the seam is ready.
+- **Vision is mocked** by default, but a real Claude proxy is wired and ready in
+  `server/` — set `ANTHROPIC_API_KEY` + `VITE_VISION_API_URL` to switch it on.
+  PRD Phase 0 (prove accuracy on real photos) is the real next step.
 - Auth is a simple role switcher in Settings (technician/manager/admin).
 
 ## Tech

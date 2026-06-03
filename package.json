@@ -8,9 +8,11 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview --host",
-    "lint": "tsc -b --noEmit"
+    "lint": "tsc -b --noEmit",
+    "vision-server": "node server/vision-extract.mjs"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.69.0",
     "@zxing/browser": "^0.1.5",
     "@zxing/library": "^0.21.3",
     "dexie": "^4.0.10",
